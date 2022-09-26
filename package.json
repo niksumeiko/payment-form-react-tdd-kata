@@ -25,6 +25,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "cypress": "cypress open",
     "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx",
     "eject": "react-scripts eject"
   },
@@ -47,10 +48,14 @@
     ]
   },
   "devDependencies": {
+    "@cypress/browserify-preprocessor": "^3.0.2",
+    "@types/cypress-cucumber-preprocessor": "^4.0.1",
     "@types/jest": "^29.0.3",
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "babel-eslint": "^10.1.0",
+    "cypress": "^10.8.0",
+    "cypress-cucumber-preprocessor": "^4.3.1",
     "eslint": "^8.24.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-prettier": "^8.5.0",
@@ -69,6 +74,11 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-testing-library": "^5.7.0",
     "jest": "^27.5.1",
-    "prettier": "^2.7.1"
+    "prettier": "^2.7.1",
+    "tsify": "^5.0.4"
+  },
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "cypress/integration/"
   }
 }
