@@ -1,20 +1,17 @@
 {
+  "extends": "../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
     "noEmit": true,
     "target": "esnext",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "jsx": "react",
     "skipLibCheck": true,
     "strict": true,
     "module": "esnext",
     "noImplicitAny": true,
-    "paths": {
-      "src/*": ["./src/*"]
-    },
-    "types": ["cypress", "node", "src/types", "jest"]
+    "resolveJsonModule": true
   },
-  "include": ["src"]
+  "types": ["cypress"],
+  "exclude": ["node_modules"]
 }

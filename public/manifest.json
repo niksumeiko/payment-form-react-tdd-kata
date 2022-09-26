@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Payment form",
+  "name": "Payment form (React + TDD kata)",
   "icons": [
     {
       "src": "favicon.ico",
