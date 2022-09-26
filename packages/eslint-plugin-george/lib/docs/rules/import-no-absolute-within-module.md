@@ -18,14 +18,14 @@ Given the following GFE folder structure:
 ```
 src
 ├── products
-│   └── index.js
+│   └── index.ts
 │   └── productsSlice.js
 │   └── productsUtils.js
 ├── transactions
-│   └── index.js
+│   └── index.ts
 │   └── utils.js
 └── core
-    └── index.js
+    └── index.ts
     └── features.js
 
 ```

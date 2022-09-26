@@ -6,7 +6,7 @@ const normalizeSep = (somePath = '') => somePath.split('\\').join('/');
 /**
  * This function returns the module group name
  * of a path:
- * @example getModuleGroupName('projects/george/packages/luna/api/src/index.js') // returns lunaapi
+ * @example getModuleGroupName('projects/george/packages/luna/api/src/index.ts') // returns lunaapi
  * */
 
 const getModuleGroupName = (path) => {
