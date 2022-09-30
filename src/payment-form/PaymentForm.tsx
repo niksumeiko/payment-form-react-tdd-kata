@@ -1,6 +1,6 @@
 /* eslint-disable george/jsx-no-inline-styles */
-import React from 'react';
 import type { FC } from 'react';
+import React from 'react';
 import { Button, Form, Input, InputNumber } from 'antd';
 
 export const PaymentForm: FC = () => {
