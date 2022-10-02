@@ -13,7 +13,8 @@
     "noImplicitAny": true,
     "paths": {
       "src/*": ["./src/*"]
-    }
+    },
+    "types": ["cypress", "node", "src/types"]
   },
-  "include": ["src", "src/types"]
+  "include": ["src"]
 }

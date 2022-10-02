@@ -1,52 +1,56 @@
 /* eslint-disable george/jsx-no-inline-styles */
 import type { FC } from 'react';
 import React from 'react';
-import { Button, Form, Input, InputNumber } from 'antd';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { object, string } from 'yup';
 
-interface FormValues {
+interface FormData {
     iban: string;
     amount: number;
 }
 
+const FORM_VALIDATION_SCHEMA = object({
+    iban: string().required('Missing IBAN'),
+});
+
 export const PaymentForm: FC = () => {
-    const handleSubmit = (values: FormValues) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormData>({
+        resolver: yupResolver(FORM_VALIDATION_SCHEMA),
+    });
+    const onSubmit = (values: FormData) => {
         // eslint-disable-next-line no-console
         console.log(values);
     };
 
     return (
-        <Form layout="vertical" autoComplete="off" requiredMark={false} onFinish={handleSubmit}>
-            <Form.Item
-                label="Recipient (IBAN)"
-                name="iban"
-                rules={[{ required: true, message: 'Missing IBAN' }]}
-                data-test="iban"
-            >
-                <Input size="large" />
-            </Form.Item>
-            <Form.Item
-                label="Amount"
-                name="amount"
-                rules={[{ required: true, message: 'Missing payment amount' }]}
-                data-test="amount"
-            >
-                <InputNumber
-                    style={{ width: '100%' }}
-                    prefix="€"
-                    addonAfter="EUR"
-                    placeholder="0,00"
-                    controls={false}
-                    min={0}
-                    decimalSeparator="."
-                    precision={2}
-                    size="large"
-                />
-            </Form.Item>
-            <Form.Item style={{ textAlign: 'center' }}>
-                <Button type="primary" htmlType="submit" size="large" data-test="submit">
-                    Pay
-                </Button>
-            </Form.Item>
-        </Form>
+        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+            <div>
+                <label htmlFor="iban">Recipient (IBAN)</label>
+                <input {...register('iban')} id="iban" data-test="iban" />
+                {errors.iban && (
+                    <p
+                        style={{
+                            margin: '0.5rem 0 1rem',
+                            background: 'rgba(255, 0, 0, 0.1)',
+                            border: 'solid 1px red',
+                            padding: '0.25rem',
+                        }}
+                    >
+                        {errors.iban.message}
+                    </p>
+                )}
+            </div>
+            <div>
+                <label htmlFor="amount">Amount</label>
+                <input {...register('amount')} placeholder="0,00" data-test="amount" />
+            </div>
+
+            <button type="submit">Pay</button>
+        </form>
     );
 };

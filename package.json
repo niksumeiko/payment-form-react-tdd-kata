@@ -4,28 +4,32 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^4.7.0",
+    "@hookform/resolvers": "^2.9.8",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "@types/node": "^16.11.60",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
-    "antd": "^4.23.2",
     "classnames": "^2.3.2",
     "postcss": "^8.4.16",
     "postcss-scss": "^4.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.36.1",
     "react-scripts": "5.0.1",
     "sass": "^1.55.0",
-    "typescript": "^4.8.3"
+    "typescript": "^4.8.3",
+    "yup": "^0.32.11"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"npm run api\" \"npm run client\"",
+    "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "cypress": "cypress open",
-    "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx",
+    "api": "node api.js"
   },
   "browserslist": {
     "production": [
@@ -46,6 +50,7 @@
     "@typescript-eslint/eslint-plugin": "^5.38.0",
     "@typescript-eslint/parser": "^5.38.0",
     "babel-eslint": "^10.1.0",
+    "concurrently": "^7.4.0",
     "cypress": "^10.8.0",
     "cypress-cucumber-preprocessor": "^4.3.1",
     "eslint": "^8.24.0",
