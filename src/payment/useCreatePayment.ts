@@ -1,25 +1,22 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { createPayment } from './PaymentService';
+import { createPayment } from './PaymentApiService';
 import type { PaymentMutation } from './CreatePaymentService';
 
 export function useCreatePayment(): PaymentMutation {
-    const mutation = useMutation(createPayment);
-    const {
-        mutate,
-        reset,
-        data: payment,
-        isError: hasPaymentFailed,
-        isSuccess: wasPaymentCreated,
-        isLoading: isPaying,
-    } = mutation;
+    const queryClient = useQueryClient();
+    const mutation = useMutation(createPayment, {
+        onSuccess: () => {
+            queryClient.invalidateQueries(['my/account']);
+        },
+    });
 
     return {
-        createPayment: mutate,
-        reset,
-        hasPaymentFailed,
-        isPaying,
-        payment,
-        wasPaymentCreated,
+        createPayment: mutation.mutate,
+        reset: mutation.reset,
+        hasPaymentFailed: mutation.isError,
+        isPaying: mutation.isLoading,
+        payment: mutation.data,
+        wasPaymentCreated: mutation.isSuccess,
     };
 }

@@ -52,11 +52,7 @@ http.createServer((req, res) => {
 
                 if (newBalance < 0) {
                     res.writeHead(406, headers);
-                    res.write(
-                        JSON.stringify({
-                            errors: [{ scope: 'amount', message: 'Not enough funds' }],
-                        }),
-                    );
+                    res.write(JSON.stringify([{ scope: 'amount', message: 'Not enough funds' }]));
                     res.end();
                     return;
                 }
