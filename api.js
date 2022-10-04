@@ -2,6 +2,8 @@ const http = require('http');
 
 const url = require('url');
 
+let myAccountBalance = 100000;
+
 http.createServer((req, res) => {
     const headers = {
         'Access-Control-Allow-Origin': 'http://localhost:3000',
@@ -21,9 +23,21 @@ http.createServer((req, res) => {
     }
 
     if (req.method === 'GET') {
-        if (pathname === '/') {
-            res.writeHead(200, headers);
-            res.end('API works');
+        switch (pathname) {
+            case '/my/account':
+                res.writeHead(200, headers);
+                res.write(
+                    JSON.stringify({
+                        balance: myAccountBalance,
+                        name: 'Main account',
+                    }),
+                );
+                res.end();
+                break;
+            case '/':
+                res.writeHead(200, headers);
+                res.end('API works');
+                break;
         }
     } else if (req.method === 'POST') {
         if (pathname === '/pay') {
@@ -33,11 +47,29 @@ http.createServer((req, res) => {
             });
             req.on('end', () => {
                 const body = JSON.parse(data);
-                body.id = new Date().getTime();
-                body.type = body.bic ? 'INTERNATIONAL' : 'DOMESTIC';
+                const amount = Math.abs(body.amount);
+                const newBalance = myAccountBalance - amount;
 
+                if (newBalance < 0) {
+                    res.writeHead(406, headers);
+                    res.write(
+                        JSON.stringify({
+                            errors: [{ scope: 'amount', message: 'Not enough funds' }],
+                        }),
+                    );
+                    res.end();
+                    return;
+                }
+
+                myAccountBalance = newBalance;
                 res.writeHead(200, headers);
-                res.write(JSON.stringify(body));
+                res.write(
+                    JSON.stringify({
+                        ...body,
+                        id: new Date().getTime(),
+                        type: body.bic ? 'INTERNATIONAL' : 'DOMESTIC',
+                    }),
+                );
                 res.end();
             });
         }
