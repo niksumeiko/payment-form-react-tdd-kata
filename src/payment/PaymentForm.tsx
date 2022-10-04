@@ -17,7 +17,6 @@ export const PaymentForm: FC = () => {
     const {
         register,
         handleSubmit,
-        reset: resetForm,
         formState: { errors },
     } = useForm<NewPayment>({
         resolver: yupResolver(FORM_VALIDATION_SCHEMA),
@@ -25,10 +24,6 @@ export const PaymentForm: FC = () => {
     const mutation = useCreatePayment();
     const onSubmit = (values: NewPayment) => {
         mutation.createPayment(values);
-    };
-    const onReset = () => {
-        resetForm();
-        mutation.reset();
     };
 
     if (isPaymentAvailable(mutation)) {
@@ -40,11 +35,6 @@ export const PaymentForm: FC = () => {
                 <p>
                     €{payment.amount} have been sent to {payment.iban}
                 </p>
-                <div>
-                    <button onClick={onReset} type="button" className={styles.formButton}>
-                        New payment
-                    </button>
-                </div>
             </div>
         );
     }
