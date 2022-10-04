@@ -5,10 +5,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
-interface FormData {
-    iban: string;
-    amount: number;
-}
+import type { NewPayment } from './PaymentService';
+import { isPaymentAvailable } from './CreatePaymentService';
+import { useCreatePayment } from './useCreatePayment';
 
 const FORM_VALIDATION_SCHEMA = object({
     iban: string().required('Missing IBAN'),
@@ -18,14 +17,37 @@ export const PaymentForm: FC = () => {
     const {
         register,
         handleSubmit,
+        reset: resetForm,
         formState: { errors },
-    } = useForm<FormData>({
+    } = useForm<NewPayment>({
         resolver: yupResolver(FORM_VALIDATION_SCHEMA),
     });
-    const onSubmit = (values: FormData) => {
-        // eslint-disable-next-line no-console
-        console.log(values);
+    const mutation = useCreatePayment();
+    const onSubmit = (values: NewPayment) => {
+        mutation.createPayment(values);
     };
+    const onReset = () => {
+        resetForm();
+        mutation.reset();
+    };
+
+    if (isPaymentAvailable(mutation)) {
+        const { payment } = mutation;
+
+        return (
+            <div data-test="payment-success">
+                <h3>A {payment.type} payment succeed!</h3>
+                <p>
+                    €{payment.amount} have been sent to {payment.iban}
+                </p>
+                <div>
+                    <button onClick={onReset} type="button">
+                        New payment
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
@@ -50,7 +72,9 @@ export const PaymentForm: FC = () => {
                 <input {...register('amount')} placeholder="0,00" data-test="amount" />
             </div>
 
-            <button type="submit">Pay</button>
+            <button type="submit" disabled={mutation.isPaying}>
+                Pay
+            </button>
         </form>
     );
 };

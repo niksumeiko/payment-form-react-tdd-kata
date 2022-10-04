@@ -2,7 +2,7 @@
 import type { FC } from 'react';
 import React from 'react';
 
-import { PaymentForm } from 'src/payment-form/PaymentForm';
+import { PaymentForm } from './PaymentForm';
 
 export const PaymentFormPage: FC = () => {
     return (

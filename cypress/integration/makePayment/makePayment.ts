@@ -1,51 +1,38 @@
 import { Given, Then, When } from 'cypress-cucumber-preprocessor/steps';
-import type { TableDefinition } from 'cypress-cucumber-preprocessor';
 
-type Method = 'GET' | 'POST';
+const NEW_PAYMENT_ENDPOINT = '/pay';
+const NEW_PAYMENT_METHOD = 'POST';
+const DOMESTIC_PAYMENT_DETAILS = {
+    iban: 'SK123',
+    amount: '10',
+};
 
-Given(
-    'API {string} {string} endpoint is mocked with',
-    (method: Method, endpoint: string, table: TableDefinition) => {
-        const body = table.rowsHash();
-        const alias = method + endpoint;
+Given('The app is ready for a domestic payment', () => {
+    const alias = NEW_PAYMENT_METHOD + NEW_PAYMENT_ENDPOINT;
 
-        cy.intercept(method, endpoint, {
-            body,
-            hostname: 'localhost',
-            port: 9000,
-        }).as(alias);
-    },
-);
-
-Then(
-    'API {string} {string} endpoint hits with',
-    (method: Method, endpoint: string, table: TableDefinition) => {
-        const body = table.rowsHash();
-        const alias = method + endpoint;
-
-        cy.wait(`@${alias}`).its('request.body').should('be.like', body);
-    },
-);
-
-Given('I open a {string} page', (pathname: string) => {
-    cy.visit(`http://localhost:3000${pathname}`);
+    cy.intercept(NEW_PAYMENT_METHOD, NEW_PAYMENT_ENDPOINT, {
+        body: {
+            ...DOMESTIC_PAYMENT_DETAILS,
+            id: 'x',
+        },
+        hostname: 'localhost',
+        port: 9000,
+    }).as(alias);
 });
 
-When('I fill in payment details', (table: TableDefinition) => {
-    const values = table.hashes();
+Then('The domestic payment is made', () => {
+    const alias = NEW_PAYMENT_METHOD + NEW_PAYMENT_ENDPOINT;
 
-    values.forEach(({ selector, value, inputType }) => {
-        const query = `[data-test="${selector}"]`;
+    cy.wait(`@${alias}`).its('request.body').should('to.deep.equal', DOMESTIC_PAYMENT_DETAILS);
+});
 
-        if (inputType === 'checkbox') {
-            const handler = value === 'true' ? 'check' : 'uncheck';
+When('I fill in details for a domestic payment', () => {
+    cy.get('[data-test="iban"]').type('SK123');
+    cy.get('[data-test="amount"]').type('10');
+});
 
-            cy.get(query)[handler]({ force: true });
-            return;
-        }
-
-        cy.get(query).type(value);
-    });
+When('I open a payment page', () => {
+    cy.visit('http://localhost:3000');
 });
 
 When('I submit a payment', () => {
@@ -53,5 +40,5 @@ When('I submit a payment', () => {
 });
 
 Then('I see created payment confirmation', () => {
-    cy.get('[data-test="payment-success"]').should('have.text', 'Payment done');
+    cy.get('[data-test="payment-success"]').should('be.visible');
 });

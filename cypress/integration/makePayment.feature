@@ -4,18 +4,10 @@ Feature: Make a payment
 
   @focus
   Scenario: Make a domestic payment
-    Given API "POST" "/pay" endpoint is mocked with
-      | id     | x     |
-      | iban   | SK123 |
-      | amount | 10 |
-    Given I open a "/" page
-    When I fill in payment details
-      | selector | value | inputType |
-      | iban     | SK123 |           |
-      | amount   | 10    |           |
+    Given The app is ready for a domestic payment
+    When I open a payment page
+    And I fill in details for a domestic payment
     And I submit a payment
-    Then API "POST" "/pay" endpoint hits with
-      | iban   | SK123 |
-      | amount | 10 |
+    Then The domestic payment is made
     And I see created payment confirmation
 

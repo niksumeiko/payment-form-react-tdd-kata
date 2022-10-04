@@ -1,11 +1,18 @@
 import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import './App.css';
 
-import { PaymentFormPage } from './pages/PaymentFormPage';
+import { PaymentFormPage } from './payment/PaymentFormPage';
+
+const queryClient = new QueryClient();
 
 function App() {
-    return <PaymentFormPage />;
+    return (
+        <QueryClientProvider client={queryClient}>
+            <PaymentFormPage />
+        </QueryClientProvider>
+    );
 }
 
 export default App;
