@@ -16,5 +16,9 @@ export async function createPayment(payment: NewPayment): Promise<Payment> {
         body: JSON.stringify(payment),
     });
 
+    if (!response.ok) {
+        throw await response.json();
+    }
+
     return response.json();
 }
