@@ -1,10 +1,10 @@
-/* eslint-disable george/jsx-no-inline-styles */
 import type { FC } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
+import styles from '../App.module.scss';
 import type { NewPayment } from './PaymentService';
 import { isPaymentAvailable } from './CreatePaymentService';
 import { useCreatePayment } from './useCreatePayment';
@@ -36,12 +36,12 @@ export const PaymentForm: FC = () => {
 
         return (
             <div data-test="payment-success">
-                <h3>A {payment.type} payment succeed!</h3>
+                <h3>A payment succeed!</h3>
                 <p>
                     €{payment.amount} have been sent to {payment.iban}
                 </p>
                 <div>
-                    <button onClick={onReset} type="button">
+                    <button onClick={onReset} type="button" className={styles.formButton}>
                         New payment
                     </button>
                 </div>
@@ -51,29 +51,32 @@ export const PaymentForm: FC = () => {
 
     return (
         <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-            <div>
-                <label htmlFor="iban">Recipient (IBAN)</label>
-                <input {...register('iban')} id="iban" data-test="iban" />
-                {errors.iban && (
-                    <p
-                        style={{
-                            margin: '0.5rem 0 1rem',
-                            background: 'rgba(255, 0, 0, 0.1)',
-                            border: 'solid 1px red',
-                            padding: '0.25rem',
-                        }}
-                    >
-                        {errors.iban.message}
-                    </p>
-                )}
+            <div className={styles.formInputField}>
+                <label htmlFor="iban" className={styles.formLabel}>
+                    Recipient (IBAN)
+                </label>
+                <input
+                    {...register('iban')}
+                    id="iban"
+                    className={styles.formInput}
+                    data-test="iban"
+                />
+                {errors.iban && <p className={styles.formError}>{errors.iban.message}</p>}
             </div>
-            <div>
-                <label htmlFor="amount">Amount</label>
-                <input {...register('amount')} placeholder="0,00" data-test="amount" />
+            <div className={styles.formInputField}>
+                <label htmlFor="amount" className={styles.formLabel}>
+                    Amount
+                </label>
+                <input
+                    {...register('amount')}
+                    id="amount"
+                    placeholder="0,00"
+                    className={styles.formInput}
+                    data-test="amount"
+                />
             </div>
-
-            <button type="submit" disabled={mutation.isPaying}>
-                Pay
+            <button type="submit" disabled={mutation.isPaying} className={styles.formButton}>
+                Make payment
             </button>
         </form>
     );
