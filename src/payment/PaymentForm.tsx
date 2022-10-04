@@ -60,7 +60,7 @@ export const PaymentForm: FC = () => {
                 <input
                     {...register('amount')}
                     id="amount"
-                    placeholder="0,00"
+                    placeholder="0.00"
                     className={styles.formInput}
                     data-test="amount"
                 />
