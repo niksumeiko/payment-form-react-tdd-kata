@@ -27,14 +27,9 @@ export const PaymentForm: FC = () => {
     };
 
     if (isPaymentAvailable(mutation)) {
-        const { payment } = mutation;
-
         return (
             <div data-test="payment-success">
                 <h3>A payment succeed!</h3>
-                <p>
-                    €{payment.amount} have been sent to {payment.iban}
-                </p>
             </div>
         );
     }

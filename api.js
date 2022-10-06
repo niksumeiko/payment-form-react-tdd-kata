@@ -50,6 +50,13 @@ http.createServer((req, res) => {
                 const amount = Math.abs(body.amount);
                 const newBalance = myAccountBalance - amount;
 
+                if (amount === 0) {
+                    res.writeHead(400, headers);
+                    res.write(JSON.stringify([{ scope: 'amount', message: 'Missing amount' }]));
+                    res.end();
+                    return;
+                }
+
                 if (newBalance < 0) {
                     res.writeHead(406, headers);
                     res.write(JSON.stringify([{ scope: 'amount', message: 'Not enough funds' }]));
@@ -62,7 +69,8 @@ http.createServer((req, res) => {
                 res.write(
                     JSON.stringify({
                         ...body,
-                        id: new Date().getTime(),
+                        amount,
+                        id: new Date().getTime().toString(),
                         type: body.bic ? 'INTERNATIONAL' : 'DOMESTIC',
                     }),
                 );
