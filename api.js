@@ -2,6 +2,10 @@ const http = require('http');
 
 const url = require('url');
 
+function getRandomDelay() {
+    return (Math.floor(Math.random() * 3) + 1) * 1000;
+}
+
 let myAccountBalance = 100000;
 
 http.createServer((req, res) => {
@@ -30,6 +34,7 @@ http.createServer((req, res) => {
                     JSON.stringify({
                         balance: myAccountBalance,
                         name: 'Main account',
+                        id: '9370277744',
                     }),
                 );
                 res.end();
@@ -47,7 +52,10 @@ http.createServer((req, res) => {
             });
             req.on('end', () => {
                 const body = JSON.parse(data);
+                const iban = body.iban.toUpperCase();
+                const bic = body.bic?.toUpperCase();
                 const amount = Math.abs(body.amount);
+                const isDomestic = iban.startsWith('SK');
                 const newBalance = myAccountBalance - amount;
 
                 if (amount === 0) {
@@ -64,17 +72,28 @@ http.createServer((req, res) => {
                     return;
                 }
 
+                if (!isDomestic && !bic) {
+                    res.writeHead(400, headers);
+                    res.write(JSON.stringify([{ scope: 'bic', message: 'Missing BIC' }]));
+                    res.end();
+                    return;
+                }
+
                 myAccountBalance = newBalance;
-                res.writeHead(200, headers);
-                res.write(
-                    JSON.stringify({
-                        ...body,
-                        amount,
-                        id: new Date().getTime().toString(),
-                        type: body.bic ? 'INTERNATIONAL' : 'DOMESTIC',
-                    }),
-                );
-                res.end();
+
+                setTimeout(() => {
+                    res.writeHead(200, headers);
+                    res.write(
+                        JSON.stringify({
+                            ...body,
+                            iban,
+                            amount,
+                            id: new Date().getTime().toString(),
+                            type: isDomestic ? 'DOMESTIC' : 'INTERNATIONAL',
+                        }),
+                    );
+                    res.end();
+                }, getRandomDelay());
             });
         }
     }
