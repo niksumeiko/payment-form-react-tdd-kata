@@ -3,7 +3,7 @@ import cucumber from 'cypress-cucumber-preprocessor';
 import browserify from '@cypress/browserify-preprocessor';
 
 export default defineConfig({
-    numTestsKeptInMemory: 0,
+    // numTestsKeptInMemory: 0,
     env: {
         uncaughtCypressException: false,
         hideXhr: true,
