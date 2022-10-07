@@ -14,6 +14,7 @@ export default defineConfig({
         openMode: 0,
     },
     e2e: {
+        baseUrl: 'http://localhost:3000',
         setupNodeEvents(on) {
             const options = {
                 ...browserify.defaultOptions,
