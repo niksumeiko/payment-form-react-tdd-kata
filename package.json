@@ -28,7 +28,8 @@
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "cypress": "cypress open",
+    "cypress": "cypress open --e2e --browser chrome",
+    "cypress:focus": "cypress open --e2e --browser chrome --env TAGS=@focus",
     "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx",
     "api": "node api.js"
   },
