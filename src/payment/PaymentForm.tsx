@@ -1,30 +1,20 @@
 import type { FC } from 'react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { object, string } from 'yup';
 
-import styles from '../App.module.scss';
-import type { NewPayment } from './PaymentService';
-import { isPaymentAvailable } from './CreatePaymentService';
 import { useCreatePayment } from './useCreatePayment';
-
-const FORM_VALIDATION_SCHEMA = object({
-    iban: string().required('Missing IBAN'),
-});
+import styles from '../App.module.scss';
+import { isPaymentAvailable } from './CreatePaymentService';
+import type { NewPayment } from './PaymentService';
+import { PAYMENT_FORM_OPTIONS } from './PaymentFormService';
 
 export const PaymentForm: FC = () => {
+    const mutation = useCreatePayment();
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<NewPayment>({
-        resolver: yupResolver(FORM_VALIDATION_SCHEMA),
-    });
-    const mutation = useCreatePayment();
-    const onSubmit = (values: NewPayment) => {
-        mutation.createPayment(values);
-    };
+    } = useForm<NewPayment>(PAYMENT_FORM_OPTIONS);
 
     if (isPaymentAvailable(mutation)) {
         return (
@@ -35,7 +25,7 @@ export const PaymentForm: FC = () => {
     }
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
+        <form onSubmit={handleSubmit(mutation.createPayment)} autoComplete="off">
             <div className={styles.formInputField}>
                 <label htmlFor="iban" className={styles.formLabel}>
                     Recipient (IBAN)

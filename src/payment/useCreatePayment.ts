@@ -1,15 +1,11 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 
-import { createPayment } from './PaymentApiService';
+import { useApiAdapters } from '../api/ApiAdapters';
 import type { PaymentMutation } from './CreatePaymentService';
 
 export function useCreatePayment(): PaymentMutation {
-    const queryClient = useQueryClient();
-    const mutation = useMutation(createPayment, {
-        onSuccess: () => {
-            queryClient.invalidateQueries(['my/account']);
-        },
-    });
+    const { createPayment } = useApiAdapters();
+    const mutation = useMutation(createPayment);
 
     return {
         createPayment: mutation.mutate,

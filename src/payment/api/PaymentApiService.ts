@@ -1,4 +1,4 @@
-import type { NewPayment, Payment } from './PaymentService';
+import type { NewPayment, Payment } from '../PaymentService';
 
 export async function createPayment(payment: NewPayment): Promise<Payment> {
     const response = await fetch('http://localhost:9000/pay', {

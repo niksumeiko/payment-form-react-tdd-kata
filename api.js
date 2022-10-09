@@ -3,7 +3,7 @@ const http = require('http');
 const url = require('url');
 
 function getRandomDelay() {
-    return (Math.floor(Math.random() * 3) + 1) * 1000;
+    return (Math.floor(Math.random() * 2) + 1) * 1000;
 }
 
 let myAccountBalance = 100000;

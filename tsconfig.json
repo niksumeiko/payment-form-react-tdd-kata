@@ -14,7 +14,7 @@
     "paths": {
       "src/*": ["./src/*"]
     },
-    "types": ["cypress", "node", "src/types"]
+    "types": ["cypress", "node", "src/types", "jest"]
   },
   "include": ["src"]
 }
