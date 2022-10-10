@@ -28,6 +28,7 @@
     "client": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage .",
     "cypress": "cypress open --e2e --browser chrome",
     "cypress:focus": "cypress open --e2e --browser chrome --env TAGS=@focus",
     "lint": "eslint . --quiet --ext .js,.jsx,.ts,.tsx",
@@ -75,6 +76,15 @@
     "jest": "^27.5.1",
     "prettier": "^2.7.1",
     "tsify": "^5.0.4"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/**/*.{ts,tsx}",
+      "!src/*.{ts,tsx}",
+      "!src/common/context/*.{ts,tsx}",
+      "!<rootDir>/node_modules/",
+      "!<rootDir>/path/to/dir/"
+    ]
   },
   "cypress-cucumber-preprocessor": {
     "nonGlobalStepDefinitions": true,
