@@ -3,7 +3,7 @@ import { act, render, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 
-import { MultiContextProvider } from '../../utils/context';
+import { MultiContextProvider } from '../../common/context';
 import { creatApiAdapters } from '../../api/ApiAdapters';
 import { PaymentFormPage } from '../PaymentFormPage';
 

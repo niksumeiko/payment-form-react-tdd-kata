@@ -1,4 +1,4 @@
-import { createGenericContext } from '../utils/context';
+import { createGenericContext } from '../common/context';
 import type { NewPayment, Payment } from '../payment/PaymentService';
 
 interface ApiAdapters {

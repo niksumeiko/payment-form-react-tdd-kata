@@ -1,7 +1,7 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import { MultiContextProvider } from './utils/context';
+import { MultiContextProvider } from './common/context';
 import { creatApiAdapters } from './api/ApiAdapters';
 import { createPayment } from './payment/api/PaymentApiService';
 import { PaymentFormPage } from './payment/PaymentFormPage';
