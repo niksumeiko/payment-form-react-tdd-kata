@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 
+import { fetchAccount } from './api/AccountApiService';
 import type { Account } from './AccountService';
-import { fetchAccount } from './AccountApiService';
 
 interface AccountQuery {
     account?: Account;
