@@ -22,7 +22,9 @@ export const PaymentFormPage: FC = () => {
                         )}
                     </div>
                     <div>
-                        <h1 className={styles.headingTitle}>Domestic payment</h1>
+                        <h1 className={styles.headingTitle} data-test="page-heading-title">
+                            Domestic payment
+                        </h1>
                     </div>
                     <div />
                 </div>

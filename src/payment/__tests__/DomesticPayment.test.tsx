@@ -37,6 +37,7 @@ describe('DomesticPayment', () => {
             userEvent.click(getByText('Make payment'));
         });
 
+        expect(getByTestId('page-heading-title')).toHaveTextContent('Domestic payment');
         await waitFor(() =>
             expect(request).toHaveBeenCalledWith({
                 iban: 'SK123',
