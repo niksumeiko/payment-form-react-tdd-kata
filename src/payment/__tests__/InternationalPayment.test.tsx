@@ -3,8 +3,9 @@ import { act, render, waitFor } from '@testing-library/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import userEvent from '@testing-library/user-event';
 
+import { MultiContextProvider } from '../../common/context/MultiContextProvider';
+import { createApiAdapters } from '../../api/ApiAdapters';
 import { PaymentFormPage } from '../PaymentFormPage';
-import * as PaymentApiService from '../api/PaymentApiService';
 
 const queryClient = new QueryClient();
 
@@ -12,10 +13,11 @@ describe('InternationalPayment', () => {
     it('sends API request when creating international payment', async () => {
         const response = { id: 'x' };
         const request = jest.fn().mockResolvedValue(response);
-        jest.spyOn(PaymentApiService, 'createPaymentRequest').mockReturnValue(request);
         const { getByTestId, getByText } = render(
             <QueryClientProvider client={queryClient}>
-                <PaymentFormPage />
+                <MultiContextProvider providers={[createApiAdapters({ createPayment: request })]}>
+                    <PaymentFormPage />
+                </MultiContextProvider>
             </QueryClientProvider>,
         );
 
@@ -37,10 +39,11 @@ describe('InternationalPayment', () => {
     });
 
     it('renders validation error when BIC is missing', async () => {
-        jest.spyOn(PaymentApiService, 'createPaymentRequest').mockReturnValue(jest.fn());
         const { getByText, getByTestId } = render(
             <QueryClientProvider client={queryClient}>
-                <PaymentFormPage />
+                <MultiContextProvider providers={[createApiAdapters({ createPayment: jest.fn() })]}>
+                    <PaymentFormPage />
+                </MultiContextProvider>
             </QueryClientProvider>,
         );
 

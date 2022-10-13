@@ -1,10 +1,11 @@
 import { useMutation } from '@tanstack/react-query';
 
-import { createPaymentRequest } from './api/PaymentApiService';
+import { useApiAdapters } from '../api/ApiAdapters';
 import type { PaymentMutation } from './CreatePaymentService';
 
 export function useCreatePayment(): PaymentMutation {
-    const mutation = useMutation(createPaymentRequest(window.fetch));
+    const { createPayment } = useApiAdapters();
+    const mutation = useMutation(createPayment);
 
     return {
         createPayment: mutation.mutate,
