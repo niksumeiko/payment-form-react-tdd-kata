@@ -28,6 +28,22 @@ describe('AnyPayment', () => {
         await waitFor(() => expect(getByText('Missing IBAN')).toBeInTheDocument());
     });
 
+    it('renders validation error when amount is missing', async () => {
+        const { getByText } = render(
+            <QueryClientProvider client={queryClient}>
+                <MultiContextProvider providers={[createApiAdapters({ createPayment: jest.fn() })]}>
+                    <PaymentFormPage />
+                </MultiContextProvider>
+            </QueryClientProvider>,
+        );
+
+        await act(() => {
+            userEvent.click(getByText('Make payment'));
+        });
+
+        await waitFor(() => expect(getByText('Missing payment amount')).toBeInTheDocument());
+    });
+
     it('renders details after payment was created', async () => {
         const response: Payment = { id: 'x', iban: 'SK123', amount: '2', type: 'DOM' };
         const request = jest.fn().mockResolvedValue(response);

@@ -7,6 +7,7 @@ import { isDomesticPayment } from './PaymentService';
 
 const FORM_VALIDATION_SCHEMA = object({
     iban: string().required('Missing IBAN'),
+    amount: string().required('Missing payment amount'),
     bic: string().when('iban', {
         is: (iban: Iban) => !isDomesticPayment({ iban }),
         then: (schema) => schema.required('Missing BIC'),
