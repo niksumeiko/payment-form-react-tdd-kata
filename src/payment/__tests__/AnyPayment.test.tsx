@@ -6,6 +6,7 @@ import userEvent from '@testing-library/user-event';
 import { createApiAdapters } from 'src/api/ApiAdapters';
 import { MultiContextProvider } from 'src/common/context/index';
 
+import type { Payment } from '../PaymentService';
 import { PaymentFormPage } from '../PaymentFormPage';
 
 const queryClient = new QueryClient();
@@ -25,5 +26,28 @@ describe('AnyPayment', () => {
         });
 
         await waitFor(() => expect(getByText('Missing IBAN')).toBeInTheDocument());
+    });
+
+    it('renders details after payment was created', async () => {
+        const response: Payment = { id: 'x', iban: 'SK123', amount: '2', type: 'DOM' };
+        const request = jest.fn().mockResolvedValue(response);
+        const { getByTestId, getByText } = render(
+            <QueryClientProvider client={queryClient}>
+                <MultiContextProvider providers={[createApiAdapters({ createPayment: request })]}>
+                    <PaymentFormPage />
+                </MultiContextProvider>
+            </QueryClientProvider>,
+        );
+
+        await act(() => {
+            userEvent.type(getByTestId('iban'), 'SK123');
+            userEvent.type(getByTestId('amount'), '2');
+
+            userEvent.click(getByText('Make payment'));
+        });
+
+        await waitFor(() => {
+            expect(getByText('A domestic payment succeed!')).toBeInTheDocument();
+        });
     });
 });

@@ -7,7 +7,7 @@ import styles from '../App.module.scss';
 import { isPaymentAvailable } from './CreatePaymentService';
 import type { NewPayment } from './PaymentService';
 import { isDomesticPayment } from './PaymentService';
-import { PAYMENT_FORM_OPTIONS } from './PaymentFormService';
+import { getSuccessMessage, PAYMENT_FORM_OPTIONS } from './PaymentFormService';
 
 export const PaymentForm: FC = () => {
     const mutation = useCreatePayment();
@@ -16,13 +16,22 @@ export const PaymentForm: FC = () => {
         handleSubmit,
         formState: { errors },
         watch,
+        reset,
     } = useForm<NewPayment>(PAYMENT_FORM_OPTIONS);
     const iban = watch('iban');
+
+    const resetPaymentForm = () => {
+        reset(PAYMENT_FORM_OPTIONS.defaultValues);
+        mutation.reset();
+    };
 
     if (isPaymentAvailable(mutation)) {
         return (
             <div data-test="payment-success">
-                <h3>A payment succeed!</h3>
+                <h3>{getSuccessMessage(mutation.payment)}</h3>
+                <button type="button" onClick={resetPaymentForm} className={styles.formButton}>
+                    Make another payment
+                </button>
             </div>
         );
     }

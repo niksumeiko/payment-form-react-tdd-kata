@@ -13,3 +13,10 @@ Feature: Make a payment
     When I fill in details for an international payment
     And I submit a payment
     Then I see successful payment confirmation
+
+  Scenario: Close successful payment confirmation
+    Given I open a payment page
+    And I fill in details for a domestic payment
+    And I submit a payment
+    When I close successful payment confirmation
+    Then I see a page ready for a next payment

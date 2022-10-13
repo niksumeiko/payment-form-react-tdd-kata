@@ -2,6 +2,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
 import type { Iban } from './IbanService';
+import type { Payment } from './PaymentService';
 import { isDomesticPayment } from './PaymentService';
 
 const FORM_VALIDATION_SCHEMA = object({
@@ -19,3 +20,11 @@ export const PAYMENT_FORM_OPTIONS = {
         amount: '',
     },
 };
+
+export function getSuccessMessage({ type }: Pick<Payment, 'type'>): string {
+    if (type === 'DOM') {
+        return 'A domestic payment succeed!';
+    }
+
+    return 'An international payment succeed!';
+}
