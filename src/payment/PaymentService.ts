@@ -3,7 +3,7 @@ export interface Payment {
     iban: string;
     bic?: string;
     amount: string;
-    type: 'DOM';
+    type: 'DOM' | 'INT';
 }
 
 export type NewPayment = Omit<Payment, 'id' | 'type'>;

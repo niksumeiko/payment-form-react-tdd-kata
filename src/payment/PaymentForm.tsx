@@ -7,7 +7,7 @@ import styles from '../App.module.scss';
 import { isPaymentAvailable } from './CreatePaymentService';
 import type { NewPayment } from './PaymentService';
 import { isDomesticPayment } from './PaymentService';
-import { PAYMENT_FORM_OPTIONS } from './PaymentFormService';
+import { getSuccessMessage, PAYMENT_FORM_OPTIONS } from './PaymentFormService';
 
 export const PaymentForm: FC = () => {
     const mutation = useCreatePayment();
@@ -22,7 +22,7 @@ export const PaymentForm: FC = () => {
     if (isPaymentAvailable(mutation)) {
         return (
             <div data-test="payment-success">
-                <h3>A payment succeed!</h3>
+                <h3>{getSuccessMessage(mutation.payment)}</h3>
             </div>
         );
     }
