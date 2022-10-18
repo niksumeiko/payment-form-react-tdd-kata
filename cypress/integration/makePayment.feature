@@ -7,3 +7,9 @@ Feature: Make a payment
     When I fill in details for a domestic payment
     And I submit a payment
     Then I see successful payment confirmation
+
+  Scenario: Make an international payment
+    Given I open a payment page
+    When I fill in details for an international payment
+    And I submit a payment
+    Then I see successful payment confirmation

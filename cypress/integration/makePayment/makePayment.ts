@@ -5,6 +5,12 @@ When('I fill in details for a domestic payment', () => {
     cy.get('[data-test="amount"]').type('10');
 });
 
+When('I fill in details for an international payment', () => {
+    cy.get('[data-test="iban"]').type('AT352011142012679110');
+    cy.get('[data-test="bic"]').type('GIBAATWWXXX');
+    cy.get('[data-test="amount"]').type('10');
+});
+
 When('I open a payment page', () => {
     cy.visit('/');
 });

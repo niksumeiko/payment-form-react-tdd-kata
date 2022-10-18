@@ -6,6 +6,7 @@ import { useCreatePayment } from './useCreatePayment';
 import styles from '../App.module.scss';
 import { isPaymentAvailable } from './CreatePaymentService';
 import type { NewPayment } from './PaymentService';
+import { isDomesticPayment } from './PaymentService';
 import { PAYMENT_FORM_OPTIONS } from './PaymentFormService';
 
 export const PaymentForm: FC = () => {
@@ -14,7 +15,9 @@ export const PaymentForm: FC = () => {
         register,
         handleSubmit,
         formState: { errors },
+        watch,
     } = useForm<NewPayment>(PAYMENT_FORM_OPTIONS);
+    const iban = watch('iban');
 
     if (isPaymentAvailable(mutation)) {
         return (
@@ -38,6 +41,20 @@ export const PaymentForm: FC = () => {
                 />
                 {errors.iban && <p className={styles.formError}>{errors.iban.message}</p>}
             </div>
+            {!isDomesticPayment({ iban }) && (
+                <div className={styles.formInputField}>
+                    <label htmlFor="bic" className={styles.formLabel}>
+                        International Bank Code (BIC)
+                    </label>
+                    <input
+                        {...register('bic')}
+                        id="bic"
+                        className={styles.formInput}
+                        data-test="bic"
+                    />
+                    {errors.bic && <p className={styles.formError}>{errors.bic.message}</p>}
+                </div>
+            )}
             <div className={styles.formInputField}>
                 <label htmlFor="amount" className={styles.formLabel}>
                     Amount

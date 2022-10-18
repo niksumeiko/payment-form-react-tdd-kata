@@ -1,8 +1,14 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
 
+import { isDomesticPayment } from './PaymentService';
+
 const FORM_VALIDATION_SCHEMA = object({
     iban: string().required('Missing IBAN'),
+    bic: string().when('iban', {
+        is: (iban: string) => !isDomesticPayment({ iban }),
+        then: (schema) => schema.required('Missing BIC'),
+    }),
 });
 
 export const PAYMENT_FORM_OPTIONS = {
