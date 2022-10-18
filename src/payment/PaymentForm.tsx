@@ -16,13 +16,22 @@ export const PaymentForm: FC = () => {
         handleSubmit,
         formState: { errors },
         watch,
+        reset,
     } = useForm<NewPayment>(PAYMENT_FORM_OPTIONS);
     const iban = watch('iban');
+
+    const resetPaymentForm = () => {
+        reset(PAYMENT_FORM_OPTIONS.defaultValues);
+        mutation.reset();
+    };
 
     if (isPaymentAvailable(mutation)) {
         return (
             <div data-test="payment-success">
                 <h3>{getSuccessMessage(mutation.payment)}</h3>
+                <button type="button" onClick={resetPaymentForm} className={styles.formButton}>
+                    Make another payment
+                </button>
             </div>
         );
     }

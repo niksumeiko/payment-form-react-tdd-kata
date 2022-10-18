@@ -19,6 +19,15 @@ When('I submit a payment', () => {
     cy.get('form [type="submit"]').click();
 });
 
+When('I close successful payment confirmation', () => {
+    cy.get('[data-test="payment-success"] button').click();
+});
+
 Then('I see successful payment confirmation', () => {
     cy.get('[data-test="payment-success"]').should('be.visible');
+});
+
+Then('I see a page ready for a next payment', () => {
+    cy.get('[data-test="iban"]').should('be.empty');
+    cy.get('[data-test="amount"]').should('be.empty');
 });
