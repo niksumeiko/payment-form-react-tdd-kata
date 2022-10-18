@@ -23,4 +23,19 @@ describe('AnyPayment', () => {
 
         await waitFor(() => expect(getByText('Missing IBAN')).toBeInTheDocument());
     });
+
+    it('renders validation error when amount is missing', async () => {
+        jest.spyOn(PaymentApiService, 'createPaymentRequest').mockReturnValue(jest.fn());
+        const { getByText } = render(
+            <QueryClientProvider client={queryClient}>
+                <PaymentFormPage />
+            </QueryClientProvider>,
+        );
+
+        await act(() => {
+            userEvent.click(getByText('Make payment'));
+        });
+
+        await waitFor(() => expect(getByText('Missing payment amount')).toBeInTheDocument());
+    });
 });

@@ -10,6 +10,7 @@ const FORM_VALIDATION_SCHEMA = object({
         is: (iban: string) => !isDomesticPayment({ iban }),
         then: (schema) => schema.required('Missing BIC'),
     }),
+    amount: string().required('Missing payment amount'),
 });
 
 export const PAYMENT_FORM_OPTIONS = {

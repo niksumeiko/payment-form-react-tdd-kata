@@ -66,6 +66,7 @@ export const PaymentForm: FC = () => {
                     className={styles.formInput}
                     data-test="amount"
                 />
+                {errors.amount && <p className={styles.formError}>{errors.amount.message}</p>}
             </div>
             <button type="submit" disabled={mutation.isPaying} className={styles.formButton}>
                 Make payment
