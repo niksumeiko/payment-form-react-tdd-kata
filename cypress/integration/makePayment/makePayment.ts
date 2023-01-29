@@ -1,18 +1,19 @@
-import { Then, When } from 'cypress-cucumber-preprocessor/steps';
+import { Given, Then, When } from 'cypress-cucumber-preprocessor/steps';
 
-When('I fill in details for a domestic payment', () => {
-    cy.get('[data-test="iban"]').type('SK123');
-    cy.get('[data-test="amount"]').type('10');
-});
-
-When('I open a payment page', () => {
+Given('I open a payment page', () => {
     cy.visit('/');
 });
 
+When('I fill in details for a domestic payment', () => {
+    cy.get('form').findByLabelText('payment.receiver.iban').type('SK123');
+    cy.get('form').findByLabelText('payment.amount').type('10');
+});
+
 When('I submit a payment', () => {
-    cy.get('form [type="submit"]').click();
+    cy.get('form').findByRole('button', { name: 'payment.submit' }).click();
 });
 
 Then('I see successful payment confirmation', () => {
-    cy.get('[data-test="payment-success"]').should('be.visible');
+    cy.get('form').should('not.exist');
+    cy.contains('payment.success.title').should('be.visible');
 });
