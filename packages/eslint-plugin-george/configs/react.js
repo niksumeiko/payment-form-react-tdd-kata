@@ -1,6 +1,6 @@
 module.exports = {
-    extends: ['react-app', 'plugin:react/jsx-runtime'],
-    plugins: ['george', 'react', 'react-hooks', 'jest-dom'],
+    extends: ['plugin:react/jsx-runtime'],
+    plugins: ['george', 'react', 'react-hooks'],
     parserOptions: {
         ecmaFeatures: {
             jsx: true,
@@ -69,14 +69,9 @@ module.exports = {
         // React hooks overrides
         'react-hooks/exhaustive-deps': 'warn',
         // Custom rules concerning React
-        'george/react-no-multiple-render-methods': 'warn',
         'george/jsx-no-ternary': 'warn',
         'george/no-unnamed-dynamic-imports': 'error',
         'george/jsx-no-inline-styles': 'error',
-        // react-testing-library
-        'jest-dom/prefer-to-have-text-content': 'error',
-        'jest-dom/prefer-empty': 'error',
-        'jest-dom/prefer-in-document': 'error',
         'react/jsx-no-bind': 'off',
         'react/function-component-definition': 'off',
         'react/jsx-no-useless-fragment': 'off',

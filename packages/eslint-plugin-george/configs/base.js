@@ -114,12 +114,7 @@ module.exports = {
         ],
         // Custom rules
         'george/no-unnamed-dynamic-imports': 'error',
-        'george/import-features-mock-first': 'error',
         'george/no-dev-log': 'error',
-        'george/no-src-in-packages': 'error',
-        'george/no-ext-in-luna-import': 'error',
-        'george/no-index-in-package': 'error',
-        'george/no-absolute-alias-for-packages': 'error',
         'default-param-last': 'warn',
     },
     overrides: [

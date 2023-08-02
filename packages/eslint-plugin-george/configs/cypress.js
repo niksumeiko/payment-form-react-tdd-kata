@@ -5,7 +5,6 @@ module.exports = {
     },
     settings: {
         'import/resolver': {
-            webpack: {},
             typescript: {},
             alias: {
                 map: [],

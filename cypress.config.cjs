@@ -1,8 +1,9 @@
-import { defineConfig } from 'cypress';
-import cucumber from 'cypress-cucumber-preprocessor';
-import browserify from '@cypress/browserify-preprocessor';
+const cypress = require('cypress');
+const cucumber = require('cypress-cucumber-preprocessor');
+const browserify = require('@cypress/browserify-preprocessor');
+const typescript = require('typescript');
 
-export default defineConfig({
+module.exports = cypress.defineConfig({
     // numTestsKeptInMemory: 0,
     env: {
         uncaughtCypressException: false,
@@ -14,15 +15,15 @@ export default defineConfig({
         openMode: 0,
     },
     e2e: {
-        baseUrl: 'http://localhost:3000',
+        // baseUrl: 'http://localhost:3000',
         setupNodeEvents(on) {
             const options = {
                 ...browserify.defaultOptions,
-                typescript: require.resolve('typescript'),
+                typescript,
             };
 
             on('file:preprocessor', cucumber.default(options));
         },
-        specPattern: 'cypress/integration/**/*.{feature,features}',
+        specPattern: 'cypress/tests/**/*.{feature,features}',
     },
 });
