@@ -1,12 +1,16 @@
 import type { FC } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import './App.css';
-import { PaymentFormPage } from './payments/useCases/savePayment/PaymentFormPage';
+import { PaymentFormPage } from './payments/useCases/createPayment/PaymentFormPage';
+
+const queryClient = new QueryClient();
 
 export const App: FC = () => {
     return (
-        <div className="h-screen flex items-center justify-center">
-            <PaymentFormPage />
-        </div>
+        <QueryClientProvider client={queryClient}>
+            <div className="h-screen flex items-center justify-center">
+                <PaymentFormPage />
+            </div>
+        </QueryClientProvider>
     );
 };

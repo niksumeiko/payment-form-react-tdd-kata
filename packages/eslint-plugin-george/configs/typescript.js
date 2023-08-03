@@ -15,12 +15,7 @@ module.exports = {
                 'no-useless-constructor': 'off',
                 '@typescript-eslint/no-useless-constructor': 'error',
                 '@typescript-eslint/ban-ts-comment': 'warn',
-                '@typescript-eslint/explicit-function-return-type': [
-                    'warn',
-                    {
-                        allowExpressions: true,
-                    },
-                ],
+                '@typescript-eslint/explicit-function-return-type': 'off',
                 'no-use-before-define': 'off',
                 '@typescript-eslint/no-use-before-define': [
                     'error',
@@ -67,12 +62,6 @@ module.exports = {
                 // checked as part of nx
                 'import/no-cycle': 'off',
                 'import/no-import-module-exports': 'off',
-            },
-        },
-        {
-            files: ['*.tsx'],
-            rules: {
-                '@typescript-eslint/explicit-function-return-type': 'off',
             },
         },
         {

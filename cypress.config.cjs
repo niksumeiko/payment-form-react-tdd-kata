@@ -1,7 +1,6 @@
 const cypress = require('cypress');
 const cucumber = require('cypress-cucumber-preprocessor');
 const browserify = require('@cypress/browserify-preprocessor');
-const typescript = require('typescript');
 
 module.exports = cypress.defineConfig({
     // numTestsKeptInMemory: 0,
@@ -15,11 +14,11 @@ module.exports = cypress.defineConfig({
         openMode: 0,
     },
     e2e: {
-        // baseUrl: 'http://localhost:3000',
+        baseUrl: 'http://localhost:5173',
         setupNodeEvents(on) {
             const options = {
                 ...browserify.defaultOptions,
-                typescript,
+                typescript: require.resolve('typescript'),
             };
 
             on('file:preprocessor', cucumber.default(options));
