@@ -2,7 +2,7 @@ import type { NewPaymentDto } from '../../api/PaymentApiService';
 
 export interface PaymentFormValues {
     iban: string;
-    amount: string;
+    amount?: string;
 }
 
 export function createNewPaymentDto(values: PaymentFormValues): NewPaymentDto {

@@ -16,3 +16,17 @@ describe('create payment', () => {
         });
     });
 });
+
+describe('invalid payment input data validations', () => {
+    it('unable to create payment when missing iban', () => {
+        cy.intercept('POST', '**/pay', cy.spy().as('createPayment'));
+
+        cy.mount(<PaymentFormPage />);
+
+        cy.get('form [data-test="amount-entry"]').type('10');
+        cy.get('form [data-test="submit-cta"]').click();
+
+        cy.contains('[role="alert"]', 'Missing IBAN').should('be.visible');
+        cy.get('@createPayment').should('not.have.been.called');
+    });
+});
