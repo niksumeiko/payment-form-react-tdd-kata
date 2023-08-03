@@ -8,9 +8,7 @@ const queryClient = new QueryClient();
 export const App: FC = () => {
     return (
         <QueryClientProvider client={queryClient}>
-            <div className="h-screen flex items-center justify-center">
-                <PaymentFormPage />
-            </div>
+            <PaymentFormPage />
         </QueryClientProvider>
     );
 };

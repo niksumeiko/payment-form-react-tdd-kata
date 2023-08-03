@@ -11,6 +11,7 @@
     "api": "node api.cjs",
     "test:unit": "vitest",
     "test:unit:coverage": "vitest run --coverage",
+    "test:intergration": "cypress open --component --browser electron",
     "test:e2e": "cypress open --e2e --browser electron",
     "test:e2e:focus": "cypress open --e2e --browser electron --env TAGS=@focus"
   },
