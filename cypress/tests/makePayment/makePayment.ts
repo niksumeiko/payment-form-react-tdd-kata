@@ -15,5 +15,5 @@ When('I submit a payment', () => {
 
 Then('I see successful payment confirmation', () => {
     cy.get('form').should('not.exist');
-    cy.get('[data-test="payment-success-message"]').should('be.visible');
+    cy.contains('A payment succeed!').should('be.visible');
 });
