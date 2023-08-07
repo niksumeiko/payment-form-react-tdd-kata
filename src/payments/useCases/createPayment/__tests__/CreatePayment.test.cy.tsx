@@ -30,3 +30,20 @@ describe('invalid payment input data validations', () => {
         cy.get('@createPayment').should('not.have.been.called');
     });
 });
+
+describe('payment receiver bank details', () => {
+    it('see receiver bank details', () => {
+        cy.intercept('GET', '**/receiver**', {
+            body: {
+                isInternal: true,
+                bank: { name: 'Super bank' },
+            },
+        });
+
+        cy.mount(<PaymentFormPage />);
+
+        cy.get('form [data-test="iban-entry"]').type('SK123').blur();
+
+        cy.contains('[role="alert"]', 'Super bank').should('be.visible');
+    });
+});

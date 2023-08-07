@@ -36,7 +36,10 @@ module.exports = {
                 extensions: ['.tsx', '.jsx'],
             },
         ],
-        'react/jsx-props-no-spreading': ['warn', { html: 'ignore' }],
+        'react/jsx-props-no-spreading': [
+            'warn',
+            { html: 'ignore', exceptions: ['FormProvider', 'TextInput'] },
+        ],
         'react/jsx-no-script-url': [
             'error',
             [

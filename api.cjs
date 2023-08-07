@@ -5,128 +5,136 @@ function getRandomDelay() {
     return (Math.floor(Math.random() * 2) + 1) * 1000;
 }
 
-let myAccountBalance = 100000;
+function writeResponse(res, data, statusCode) {
+    res.writeHead(statusCode, headers);
+    if (data) res.write(JSON.stringify(data));
+    res.end();
+}
+
+function delayResponse(data) {
+    return new Promise((resolve) => {
+        setTimeout(() => resolve(data), getRandomDelay());
+    });
+}
+
+function writeSuccess(res, data) {
+    writeResponse(res, data, 200);
+}
+
+function writeErrors(res, errors, statusCode = 500) {
+    writeResponse(res, errors, statusCode);
+}
+
+function getRequestUrl(req) {
+    return new URL(req.url, 'http://' + req.headers.host + '/');
+}
+
+function handleReceiverEndpoint(req, res) {
+    const { searchParams } = getRequestUrl(req);
+    const iban = searchParams.get('iban');
+
+    if (!iban) {
+        return writeErrors(res, [{
+            scope: 'iban',
+            message: 'Missing iban',
+        }], 400);
+    }
+
+    if (iban === 'AT0309000000000019176655') {
+        return writeSuccess(res, {
+            isInternal: true,
+        });
+    }
+
+    if (iban.startsWith('SK')) {
+        return writeSuccess(res, {
+            isInternal: true,
+            bank: {
+                name: 'Slovenská sporiteľňa',
+                address: {
+                    city: 'Bratislava',
+                    country: 'SK'
+                },
+            },
+        });
+    }
+
+    return writeSuccess(res, {
+        isInternal: false,
+        bank: {
+            name: 'Santander Consumer Bank',
+            address: {
+                street: 'Schweglerstraße 26',
+                zip: '1150',
+                city: 'Vienna',
+                country: 'AT'
+            },
+        },
+    });
+}
+
+function getRequestPayload(req) {
+    return new Promise((resolve) => {
+        let data = '';
+        req.on('data', (chunk) => {
+            data += chunk.toString();
+        });
+        req.on('end', () => {
+            resolve(JSON.parse(data));
+        });
+    });
+}
+
+function handlePaymentEndpoint(req, res) {
+    getRequestPayload(req)
+        .then((body) => {
+            const { amount } = body;
+
+            if (typeof amount !== 'number' || amount === 0) {
+                return writeErrors(res, [{
+                    scope: 'amount',
+                    message: 'Missing or mistyped amount',
+                }], 400);
+            }
+
+            return delayResponse(body);
+        })
+        .then((body) => {
+            const iban = body.iban.toUpperCase();
+
+            writeSuccess(res, {
+                iban,
+                amount: body.amount,
+                id: new Date().getTime().toString(),
+                type: 'DOM',
+            })
+        });
+}
+
+const headers = {
+    'Access-Control-Allow-Origin': 'http://localhost:5173',
+    'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+};
 
 http.createServer((req, res) => {
-    const headers = {
-        'Access-Control-Allow-Origin': 'http://localhost:5173',
-        'Access-Control-Allow-Methods': 'OPTIONS, POST, GET',
-        'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
-    };
-
-    const url = new URL(req.url, 'http://' + req.headers.host + '/');
-    const { pathname, searchParams } = url;
+    const { pathname } = getRequestUrl(req);
 
     if (req.method === 'OPTIONS') {
-        res.writeHead(204, headers);
-        res.end();
-        return;
+        return writeResponse(res, undefined, 204);
     }
 
     if (req.method === 'GET') {
         if (pathname === '/receiver') {
-            let iban = searchParams.get('iban');
-
-            if (!iban) {
-                res.writeHead(400, headers);
-                res.write(JSON.stringify([{ scope: 'iban', message: 'Missing iban' }]));
-                res.end();
-                return;
-            }
-
-            if (iban === 'AT0309000000000019176655') {
-                res.writeHead(200, headers);
-                res.write(
-                    JSON.stringify({
-                        isInternal: true,
-                    }),
-                );
-                res.end();
-                return;
-            }
-
-            if (iban.startsWith('SK')) {
-                res.writeHead(200, headers);
-                res.write(
-                    JSON.stringify({
-                        isInternal: true,
-                        bank: {
-                            name: 'Slovenská sporiteľňa',
-                            address: {
-                                city: 'Bratislava',
-                                country: 'SK'
-                            },
-                        },
-                    }),
-                );
-                res.end();
-                return;
-            }
-
-            res.writeHead(200, headers);
-            res.write(
-                JSON.stringify({
-                    bank: {
-                        name: 'Santander Consumer Bank',
-                        address: {
-                            street: 'Schweglerstraße 26',
-                            zip: '1150',
-                            city: 'Vienna',
-                            country: 'AT'
-                        },
-                    },
-                }),
-            );
-            res.end();
+            return handleReceiverEndpoint(req, res);
         }
     }
 
     if (req.method === 'POST') {
         if (pathname === '/pay') {
-            let data = '';
-            req.on('data', (chunk) => {
-                data += chunk.toString();
-            });
-            req.on('end', () => {
-                const body = JSON.parse(data);
-                const { amount } = body;
-                const iban = body.iban.toUpperCase();
-                const newBalance = myAccountBalance - amount;
-
-                if (amount === 0) {
-                    res.writeHead(400, headers);
-                    res.write(JSON.stringify([{ scope: 'amount', message: 'Missing amount' }]));
-                    res.end();
-                    return;
-                }
-
-                // if (newBalance < 0) {
-                //     res.writeHead(406, headers);
-                //     res.write(JSON.stringify([{ scope: 'amount', message: 'Not enough funds' }]));
-                //     res.end();
-                //     return;
-                // }
-
-                myAccountBalance = newBalance;
-
-                setTimeout(() => {
-                    res.writeHead(200, headers);
-                    res.write(
-                        JSON.stringify({
-                            ...body,
-                            iban,
-                            amount,
-                            id: new Date().getTime().toString(),
-                            type: 'DOM',
-                        }),
-                    );
-                    res.end();
-                }, getRandomDelay());
-                return;
-            });
+            return handlePaymentEndpoint(req, res);
         }
     }
 
-    res.writeHead(404, headers);
-    res.end();
+    writeErrors(res, [{ message: 'Not found' }], 404)
 }).listen(9000, () => console.info('API ready/started'));

@@ -5,9 +5,10 @@ interface Props {
     label: string;
     renderInput(labelReference: string): ReactNode;
     error?: string;
+    description?: ReactNode;
 }
 
-export const FormField = ({ error, label, renderInput }: PropsWithChildren<Props>) => {
+export const FormField = ({ description, error, label, renderInput }: PropsWithChildren<Props>) => {
     const labelReference = useId();
 
     return (
@@ -20,10 +21,11 @@ export const FormField = ({ error, label, renderInput }: PropsWithChildren<Props
             </label>
             <div className="mt-2">{renderInput(labelReference)}</div>
             {error && (
-                <p role="alert" className="mt-2 text-sm text-red-600 dark:text-red-500">
+                <p role="alert" className="mt-2 text-sm text-red-600">
                     {error}
                 </p>
             )}
+            {description}
         </div>
     );
 };
