@@ -1,9 +1,0 @@
-{
-  "name": "eslint-plugin-george",
-  "author": "The Core Team",
-  "version": "1.0.0",
-  "main": "index.js",
-  "dependencies": {
-    "common-tags": "1.8.2"
-  }
-}

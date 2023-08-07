@@ -1,7 +1,9 @@
+import { describe, expect, it } from 'vitest';
+
 import { getValidApiResponse } from '../ApiService';
 
 describe('ApiService', () => {
-    describe('#getValidApiResponse()', () => {
+    describe('retrieve valid api response', () => {
         it('throws API errors when request failed', async () => {
             const response = { ok: false, json: () => Promise.resolve('x') };
 

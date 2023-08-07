@@ -1,14 +1,14 @@
-export type ApiErrors = {
-    scope: string;
-    message: string;
-}[];
-
 export type Request = (url: string, options: RequestInit) => Promise<Response>;
 
+export interface ApiError {
+    scope?: string;
+    message: string;
+}
+
 export async function getValidApiResponse<T>(response: Pick<Response, 'ok' | 'json'>): Promise<T> {
-    if (response.ok) {
-        return response.json();
+    if (!response.ok) {
+        throw await response.json();
     }
 
-    throw await response.json();
+    return response.json();
 }
